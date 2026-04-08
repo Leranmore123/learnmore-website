@@ -277,7 +277,7 @@ export default function CoursePage({ params }: { params: { slug: string } }) {
         </section>
 
         {/* Syllabus Preview */}
-        {course.syllabus && (
+        {(course as any).syllabus && (
           <section className="py-16 bg-white">
             <div className="container mx-auto px-4 max-w-4xl">
               <div className="flex justify-between items-center mb-6">
@@ -296,7 +296,7 @@ export default function CoursePage({ params }: { params: { slug: string } }) {
                 </button>
               </div>
               <div className="space-y-4">
-                {Object.entries(course.syllabus).map(([module, topics]: [string, any], idx) => (
+                {Object.entries((course as any).syllabus).map(([module, topics]: [string, any], idx) => (
                   <details key={idx} className="border rounded-lg p-4 bg-gray-50">
                     <summary className="font-semibold text-lg cursor-pointer hover:text-red-500">
                       Module {idx + 1}: {module.charAt(0).toUpperCase() + module.slice(1)}

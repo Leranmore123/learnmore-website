@@ -33,7 +33,6 @@ const syllabusPDFs: Record<string, string> = {
   'power-bi': '/pdfs/power-bi-syllabus.pdf',
   'react': '/pdfs/react-syllabus.pdf',
   'data-science': '/pdfs/data-science-syllabus.pdf',
-  'data-engineering': '/pdfs/data-engineering-syllabus.pdf',
   'digital-marketing': '/pdfs/digital-marketing-syllabus.pdf',
   'cybersecurity': '/pdfs/cybersecurity-syllabus.pdf',
 };
@@ -265,7 +264,7 @@ export default function CatchAllPage({ params }: CatchAllPageProps) {
   for (const key of Object.keys(courseMapping)) {
     if (fullSlug.startsWith(`${key}-training-in-`)) {
       courseKey = key;
-      foundCourse = courseMapping[key];
+      foundCourse = courseMapping[key as keyof typeof courseMapping];
       break;
     }
   }
@@ -286,10 +285,10 @@ export default function CatchAllPage({ params }: CatchAllPageProps) {
   }
   
   // કોર્સ ડેટા લોડ કરો
-  const course = coursesData.courses.find(c => c.slug === foundCourse.slug);
+  const course = coursesData.courses.find(c => c.slug === courseKey);
   
   // Get syllabus PDF path
-  const syllabusPDFPath = syllabusPDFs[foundCourse.slug] || syllabusPDFs[courseKey] || '/pdfs/default-syllabus.pdf';
+  const syllabusPDFPath = syllabusPDFs[courseKey!] || syllabusPDFs[courseKey!] || '/pdfs/default-syllabus.pdf';
   
   // Handle syllabus download (only after enrollment)
   const handleDownloadSyllabus = () => {
@@ -582,8 +581,8 @@ export default function CatchAllPage({ params }: CatchAllPageProps) {
                 </button>
               </div>
               <div className="space-y-3">
-                {course?.syllabus ? (
-                  Object.entries(course.syllabus).map(([module, topics]: [string, any], idx) => (
+                {(course as any)?.syllabus ? (
+                  Object.entries((course as any).syllabus).map(([module, topics]: [string, any], idx) => (
                     <details key={idx} className="border rounded-lg p-3">
                       <summary className="font-semibold cursor-pointer hover:text-blue-600 text-sm">
                         Module {idx + 1}: {module.charAt(0).toUpperCase() + module.slice(1)}
@@ -724,7 +723,7 @@ export default function CatchAllPage({ params }: CatchAllPageProps) {
                             </div>
                           </div>
                           <p class="text-xs text-gray-400 mt-6">
-                            Certificate ID: LMT-${foundCourse.slug?.toUpperCase() || courseKey?.toUpperCase()}-2026-XXXX
+                            Certificate ID: LMT-${courseKey?.toUpperCase() || courseKey?.toUpperCase()}-2026-XXXX
                           </p>
                         `;
                         parent.appendChild(textVersion);
@@ -746,7 +745,7 @@ export default function CatchAllPage({ params }: CatchAllPageProps) {
                     onClick={() => {
                       const link = document.createElement('a');
                       link.href = '/images/courses/certificate-sample.png';
-                      link.download = `${foundCourse.slug || courseKey}-certificate.png`;
+                      link.download = `${courseKey || courseKey}-certificate.png`;
                       link.click();
                     }}
                     className="border border-blue-500 text-blue-500 px-6 py-2 rounded-lg font-semibold hover:bg-blue-50 transition"

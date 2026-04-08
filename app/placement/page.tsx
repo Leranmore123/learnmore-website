@@ -15,7 +15,7 @@ export default function PlacementPage() {
   const [filterCourse, setFilterCourse] = useState('all');
 
   // Get unique courses for filter
-  const courses = ['all', ...new Set(placements.map(p => p.course))];
+  const courses = ["all", ...Array.from(new Set(placements.map(p => p.course)))];
 
   // Filter placements
   const filteredPlacements = placements.filter(placement => {
@@ -113,13 +113,13 @@ export default function PlacementPage() {
                           e.currentTarget.style.display = 'none';
                           const parent = e.currentTarget.parentElement;
                           if (parent) {
-                            parent.innerHTML = `<div class="w-full h-full flex items-center justify-center text-white text-2xl font-bold">${student.initial}</div>`;
+                            parent.innerHTML = `<div class="w-full h-full flex items-center justify-center text-white text-2xl font-bold">${student.name[0]}</div>`;
                           }
                         }}
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-white text-2xl font-bold">
-                        {student.initial || student.name.charAt(0)}
+                        {student.name[0] || student.name.charAt(0)}
                       </div>
                     )}
                   </div>
